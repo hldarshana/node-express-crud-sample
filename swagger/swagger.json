@@ -1,0 +1,317 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Mini App",
+    "description": "Sample API for WEF"
+  },
+  "servers": [
+    {
+      "url": "https://mini-service-wef.herokuapp.com/api",
+      "description": "Production HTTPS"
+    },
+    {
+      "url": "http://mini-service-wef.herokuapp.com/api",
+      "description": "Production HTTP"
+    },
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Local HTTP"
+    }
+  ],
+  "paths": {
+    "/employees": {
+      "get": {
+        "summary": "Get all employees",
+        "description": "Returns a list containing all employees.",
+        "parameters":[
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name of the employee",
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "description": "Address of the employee",
+            "type": "string"
+          },
+          {
+            "name": "age",
+            "in": "query",
+            "description": "Age of the employee",
+            "type": "integer"
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "Country of the employee",
+            "type": "sring"
+          },
+          {
+            "name": "married",
+            "in": "query",
+            "description": "Married status of the employee",
+            "type": "boolean"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "schema":{
+              "type": "string",
+              "enum": ["name", "age", "country", "address", "married"]
+            },
+            "description": "Sort by"
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema":{
+              "type": "string",
+              "enum": ["asc", "desc"]
+            },
+            "description": "Sort direction"
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Number of records to skip",
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Page size",
+            "type": "integer"
+          }         
+        ],         
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content":{
+              "application/json":{
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": {
+                      "type": "number"
+                    },
+                    "records":{
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/employee"
+                      }
+                    }
+                  }              
+                }
+              },
+              "application/xml":{
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": {
+                      "type": "number"
+                    },
+                    "records":{
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/employee"
+                      },
+                      "xml": {
+                        "wrapped": true,
+                        "name": "employees"
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "result"
+                  }              
+                }
+              }
+            }           
+          }
+        }
+      },
+      "post": {
+        "summary": "Add new employee",
+        "description": "Add the employee and return with id.",
+        "requestBody":{
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/employee"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/employee"
+              }
+            }
+          }
+        },         
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content":{
+              "application/json":{
+                "schema": {
+                  "$ref": "#/components/schemas/employee"
+                }
+              },
+              "application/xml":{
+                "schema": {
+                  "$ref": "#/components/schemas/employee"
+                }
+              }
+            } 
+          }
+        }
+      },
+      "put": {
+        "summary": "Update employee",
+        "description": "Update the employee and return.",
+        "requestBody":{
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/employee"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/employee"
+              }
+            }
+          }
+        },         
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content":{
+              "application/json":{
+                "schema": {
+                  "$ref": "#/components/schemas/employee"
+                }
+              },
+              "application/xml":{
+                "schema": {
+                  "$ref": "#/components/schemas/employee"
+                }
+              }
+            } 
+          }
+        }
+      }
+    },
+    "/employees/{employeeId}": {
+      "get": {
+        "summary": "Get a specific employee by id",
+        "description": "Returns the requested employee.",
+        "parameters":[
+          {
+            "name": "employeeId",
+            "in": "path",
+            "description": "Id of the employee",
+            "type": "string",
+            "required": true
+          }
+        ],         
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content":{
+              "application/json":{
+                "schema": {
+                  "$ref": "#/components/schemas/employee"
+                }
+              },
+              "application/xml":{
+                "schema": {
+                  "$ref": "#/components/schemas/employee"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specific employee by id",
+        "description": "Returns success or not",
+        "parameters":[
+          {
+            "name": "employeeId",
+            "in": "path",
+            "description": "Id of the employee",
+            "type": "string",
+            "required": true
+          }
+        ],         
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content":{
+              "application/json":{
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              },
+              "application/xml":{
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  },
+                  "xml": {
+                    "wrapped": true,
+                    "name": "result"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas":{
+      "employee":{
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "required": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "number"
+          },
+          "country": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "married": {
+            "type": "boolean"
+          }
+        },
+        "xml": {
+          "name": "employee"
+        }
+      }
+    }
+  }
+}
